@@ -45,8 +45,8 @@ let EtherealMailProvider = (_dec = (0, _tsyringe.injectable)(), _dec2 = function
   }) {
     const message = await this.client.sendMail({
       from: {
-        name: (from === null || from === void 0 ? void 0 : from.name) || 'Equipe GoBarber',
-        address: (from === null || from === void 0 ? void 0 : from.email) || 'equipe@gobarber.com.br'
+        name: (from === null || from === void 0 ? void 0 : from.name) || 'Equipe Fininho Barber',
+        address: (from === null || from === void 0 ? void 0 : from.email) || 'equipe@fininhobarber.com.br'
       },
       to: {
         name: to.name,
