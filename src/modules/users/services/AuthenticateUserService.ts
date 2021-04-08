@@ -2,7 +2,6 @@
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import authConfig from '@config/auth';
-
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 import User from '../infra/typeorm/entities/User';
@@ -34,15 +33,24 @@ class AuthenticateUserService {
     
     public async execute({ email, password }: IRequest): Promise<IResponse> {
         const user = await this.usersRepository.findByEmail(email);
-
+        
     if (!user) {
       throw new AppError('Incorrect email/password combination', 401);
     }
 
+    // if (!user.provider) {
+    //   throw new AppError('Usuário não é prestador');
+    // }
+
+    if (user.provider) {
+      throw new AppError('O usuário não pode ser prestador de serviços');      
+    }
+    console.log('O usuario é um Prestador de Serviços');
+        
     const passwordMatched = await this.hashProvider.compareHash(password, user.password);
 
     if (!passwordMatched) {
-      throw new AppError('Incorrect email/password combination', 401);
+      throw new AppError('Incorrect email/password combination', 401);      
     }
 
     const { secret, expiresIn } = authConfig.jwt;

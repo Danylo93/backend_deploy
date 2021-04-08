@@ -24,6 +24,9 @@ class User {
   avatar: string;
 
   @Column()
+  provider: boolean;
+
+  @Column()
   @Exclude()
   password: string;
 

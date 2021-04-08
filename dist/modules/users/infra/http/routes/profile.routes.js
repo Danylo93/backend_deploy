@@ -1,30 +1,38 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var celebrate_1 = require("celebrate");
-var ProfileController_1 = __importDefault(require("../controllers/ProfileController"));
-var ensureAuthenticated_1 = __importDefault(require("../middlewares/ensureAuthenticated"));
-var profileRouter = express_1.Router();
-var profileController = new ProfileController_1.default();
-profileRouter.use(ensureAuthenticated_1.default);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _express = require("express");
+
+var _celebrate = require("celebrate");
+
+var _ProfileController = _interopRequireDefault(require("../controllers/ProfileController"));
+
+var _ensureAuthenticated = _interopRequireDefault(require("../middlewares/ensureAuthenticated"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const profileRouter = (0, _express.Router)();
+const profileController = new _ProfileController.default();
+profileRouter.use(_ensureAuthenticated.default);
 profileRouter.get('/', profileController.show);
-profileRouter.put('/', celebrate_1.celebrate((_a = {},
-    _a[celebrate_1.Segments.BODY] = {
-        name: celebrate_1.Joi.string().required(),
-        email: celebrate_1.Joi.string().email().required(),
-        old_password: celebrate_1.Joi.string(),
-        password: celebrate_1.Joi.when('old_password', {
-            is: celebrate_1.Joi.exist(),
-            then: celebrate_1.Joi.required(),
-        }),
-        password_confirmation: celebrate_1.Joi.when('password', {
-            is: celebrate_1.Joi.exist(),
-            then: celebrate_1.Joi.valid(celebrate_1.Joi.ref('password')).required(),
-        }),
-    },
-    _a)), profileController.update);
-exports.default = profileRouter;
+profileRouter.put('/', (0, _celebrate.celebrate)({
+  [_celebrate.Segments.BODY]: {
+    name: _celebrate.Joi.string().required(),
+    email: _celebrate.Joi.string().email().required(),
+    old_password: _celebrate.Joi.string(),
+    password: _celebrate.Joi.when('old_password', {
+      is: _celebrate.Joi.exist(),
+      then: _celebrate.Joi.required()
+    }),
+    password_confirmation: _celebrate.Joi.when('password', {
+      is: _celebrate.Joi.exist(),
+      then: _celebrate.Joi.valid(_celebrate.Joi.ref('password')).required()
+    })
+  }
+}), profileController.update);
+var _default = profileRouter;
+exports.default = _default;
